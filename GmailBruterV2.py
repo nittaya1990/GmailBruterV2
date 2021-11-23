@@ -44,21 +44,23 @@ def StartSMTPServiceForGmail():
 def HelpGuide():
 	print("\nHelp Guide For GmailBruterV2.")
 	print("Commands For Shell:")
-	print("\thelp   --   To Show This Messages")
-	print("\tset target   --   To Set The Victim Email Address")
-	print("\tset time   --   To Set Time Between Every 10 Faild Passwords")
-	print("\tset list   --   To Set PassList Name ")
-	print("\tshow target   --   To Show You Current Target ")
-	print("\tshow time   --   To Show You Current Time ")
-	print("\tshow list   --   To Show You Current List ")
-	print("\tload   --   Load Local Config For Settings")
-	print("\tstart   --   To Start Brute Force Attack\n")
-	print("\texit   --   Close The Shell")
+	print("\thelp\t\t--\tTo Show This Messages")
+	print("\tset target\t--\tTo Set The Victim Email Address")
+	print("\tset time\t--\tTo Set Time Between Every 10 Faild Passwords")
+	print("\tset list\t--\tTo Set PassList Name ")
+	print("\tshow target\t--\tTo Show You Current Target ")
+	print("\tshow time\t--\tTo Show You Current Time ")
+	print("\tshow list\t--\tTo Show You Current List ")
+	print("\tload\t\t--\tLoad Local Config For Settings")
+	print("\tstart\t\t--\tTo Start Brute Force Attack\n")
+	print("\texit\t\t--\tClose The Shell")
 
 def ContactMe():
 	Gmail =  "mdaif1332@gmail.com" # Don't perform the brute-force attacks on my email.
 
 def StartShell():
+	# store how many times the user pressed Ctrl + C
+	AbortCount = 0
 	Commands = []
 	Account = ''
 	Time = ''
@@ -68,7 +70,32 @@ def StartShell():
 			Command = Command.rstrip("\n")
 			Commands.append(Command)
 	while True:
-		ShellResponse = input("root@GmailBruter: ")
+		# init variable to store user input
+		ShellResponse = ''
+		try:
+			# get input from user
+			ShellResponse = input("root@GmailBruter: ")
+
+		# handle Ctrl + C
+		except KeyboardInterrupt:
+			# increment AbortCount
+			AbortCount += 1
+			# print \n to print the new shell line on the next line
+			print()
+			# if the user pressed Ctrl + C two times
+			if AbortCount >= 2:
+				# print hint
+				print("[!] Press Ctrl + D or enter 'exit' to abort the program.")
+				# reset abortcount
+				AbortCount = 0
+			continue
+		# handle Ctrl + D
+		# Ctrl + D normally indicated the end of a file
+		# this is why python throws an EOFError
+		except EOFError:
+			print()
+			exit()
+
 		if ShellResponse.lower().replace(' ' , '') not in Commands:
 			if "s-" in ShellResponse.lower():
 				Command = ShellResponse.split("-"); Command = Command[1]
